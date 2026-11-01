@@ -30,19 +30,12 @@ class User(BaseModel):
     name: str
     email: str
     age: int
-
-
-# Пока храним пользователей в словаре
-# После перезапуска приложения данные сбросятся
 users: dict[int, User] = {}
 next_user_id = 1
-
 
 @app.get("/", tags=["Главная"])
 def home():
     return {"message": "Users API работает", "docs": "/docs"}
-
-
 @app.post(
     "/users",
     response_model=User,
@@ -52,12 +45,10 @@ def home():
 )
 def create_user(user_data: UserCreate):
     global next_user_id
-
     user = User(id=next_user_id, **user_data.model_dump())
     users[next_user_id] = user
     next_user_id += 1
     return user
-
 
 @app.get(
     "/users",
